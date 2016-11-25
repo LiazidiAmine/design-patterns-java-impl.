@@ -24,4 +24,5 @@
 	* Les diagram UML décrivent la conception, donc ils ne conaissent pas les lambda.
 	* On ne fait pas de getters, sa revient au meme que d'avoir des champs publics
 	* Iterator contient une méthode remove, sa casse l'encapsulation. il faut donc un iterator non mutable, on transforme donc la liste de l'iterator en unmodifiable
-	* 
+	* utiliser une map qui associe un nom a une action
+	* on veut abstraire " comment parser quelque chose " donc on crée une map dans la quelle on associe une action a un nom

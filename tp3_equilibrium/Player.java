@@ -21,25 +21,8 @@ public class Player {
 		this.actions = monsters;
 	}
 
-	private static Action newAction(String line) {
-		String[] tokens = line.split(" ");
-		String actionName = tokens[0];
-		switch(tokens[0]){
-		case "monster":
-			return ActionFactory.createMonster(
-					Integer.parseInt(
-							tokens[1]));
-		case "lightning":
-			return ActionFactory.createLigntning(
-					Integer.parseInt(
-							tokens[1]));
-		default:
-			throw new IllegalArgumentException("unknow action "+actionName);
-		}
-	}
-
-	public static Player create(String name, Path path) throws IOException{
-		List<Action> actions = LineParser.parse(path, Player::newAction);
+	public static Player create(String name, Path path, ActionFactoryKit kit) throws IOException{
+		List<Action> actions = LineParser.parse(path, kit::create);
 		return new Player(name, actions);
 	}
 

@@ -41,8 +41,16 @@ public class Game {
 	}
 
 	public static void main(String[] args) throws IOException {
-		Player p1 = Player.create("bob", Paths.get("td3/bob-deck.txt"));
-		Player p2 = Player.create("alice", Paths.get("td3/alice-deck.txt"));
+		ActionFactoryKit kit = new ActionFactoryKit();
+		kit.register("monster", 
+				tokens -> ActionFactory.createMonster(Integer.parseInt(
+							tokens[1])));
+		kit.register("lightning", 
+				tokens -> ActionFactory.createLigntning(Integer.parseInt(
+							tokens[1])));
+		
+		Player p1 = Player.create("bob", Paths.get("td3/bob-deck.txt"), kit);
+		Player p2 = Player.create("alice", Paths.get("td3/alice-deck.txt"), kit);
 		play(p1, p2);
 	}
 }
