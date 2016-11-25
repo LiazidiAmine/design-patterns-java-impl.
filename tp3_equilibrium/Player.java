@@ -20,29 +20,41 @@ public class Player {
 		this.health = 5;
 		this.actions = monsters;
 	}
-	
-	private static Monster newMonster(String line) {
-		return new Monster(
-				Integer.parseInt(line.split(" ")[1]));
+
+	private static Action newAction(String line) {
+		String[] tokens = line.split(" ");
+		String actionName = tokens[0];
+		switch(tokens[0]){
+		case "monster":
+			return ActionFactory.createMonster(
+					Integer.parseInt(
+							tokens[1]));
+		case "lightning":
+			return ActionFactory.createLigntning(
+					Integer.parseInt(
+							tokens[1]));
+		default:
+			throw new IllegalArgumentException("unknow action "+actionName);
+		}
 	}
-	
+
 	public static Player create(String name, Path path) throws IOException{
-		List<Action> actions = LineParser.parse(path, Player::newMonster);
+		List<Action> actions = LineParser.parse(path, Player::newAction);
 		return new Player(name, actions);
 	}
-	
+
 	public boolean isDead(){
 		return health <= 0;
 	}
-	
+
 	public void beingHit(int damage) {
 		health -= damage;
 	}
-	
+
 	public String getName(){
 		return name;
 	}
-	
+
 	public Iterator<Action> action(){
 		return Collections.unmodifiableList(actions).iterator();
 	}
