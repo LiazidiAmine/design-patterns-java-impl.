@@ -1,30 +1,13 @@
 package tp3_passetonbac;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Main {
-	
-	public static List<Taxable> createConvoy(Path path, TaxableFactoryKit<Taxable> taxableFactory) throws IOException{
-		try(Stream<String> lines = Files.lines(path)){
-			return lines.map(line -> parseTruck(line, taxableFactory))
-					.collect(Collectors.toList());
-		}
-	}
-	
-	private static Taxable parseTruck(String line, TaxableFactoryKit<Taxable> taxableFactory) {
-		String[] tokens = line.split(" ");
-		String kind = tokens[0];
-		return taxableFactory.create(kind,
-				Arrays.stream(tokens).skip(1).collect(Collectors.toList()));
-	}
-
 	
 	private static long computeTaxe(List<Taxable> taxables){
 		return taxables.stream()
@@ -37,6 +20,13 @@ public class Main {
 		return () -> 200 * passengerCount;
 	}
 	
+	public static Taxable parseTruck(String line, FactoryKit<Taxable> taxableFactory) {
+		String[] tokens = line.split(" ");
+		String kind = tokens[0];
+		return taxableFactory.create(kind,
+				Arrays.stream(tokens).skip(1).collect(Collectors.toList()));
+	}
+	
 	private static Taxable createMoto(List<String> tokens){
 		return () -> 0;
 	}
@@ -46,8 +36,12 @@ public class Main {
 		return new Truck(weight);
 	}
 	
+	public static List<Taxable> createConvoy(Path path, FactoryKit<Taxable> taxableFactory){
+		return Parser.parse(path, line -> parseTaxable(line, taxableFactory));
+	}
+	
 	public static void main(String[] args) throws IOException{
-		TaxableFactoryKit<Taxable> taxableFactory = new TaxableFactoryKit<>();
+		FactoryKit<Taxable> taxableFactory = new FactoryKit<>();
 		taxableFactory.register("auto", Main::createAuto);
 		taxableFactory.register("moto", Main::createMoto);
 		taxableFactory.register("truck", Main::createTruck);

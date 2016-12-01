@@ -6,7 +6,7 @@ import java.util.Objects;
 //pour fermer ce code, on le met dans un package a part
 //une hashmap ne conserve pas l'ordre des données
 //factory kit une sorte de factory qui permet d'enregistrer des bouts de factory
-public class TaxableFactoryKit<T> {
+public class FactoryKit<T> {
 	private final HashMap<String, Creator<T>> map = new HashMap<>(); 
 
 	public interface Creator<T> {
