@@ -1,0 +1,2 @@
+truck blue 2000
+truck red 10000
