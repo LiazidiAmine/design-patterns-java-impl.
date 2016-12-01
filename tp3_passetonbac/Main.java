@@ -11,17 +11,18 @@ import java.util.stream.Stream;
 
 public class Main {
 	
-	public static List<Taxable> createConvoy(Path path, TaxableFactory taxableFactory) throws IOException{
+	public static List<Taxable> createConvoy(Path path, TaxableFactoryKit<Taxable> taxableFactory) throws IOException{
 		try(Stream<String> lines = Files.lines(path)){
 			return lines.map(line -> parseTruck(line, taxableFactory))
 					.collect(Collectors.toList());
 		}
 	}
 	
-	public static Taxable parseTruck(String line, TaxableFactory taxableFactory) {
+	private static Taxable parseTruck(String line, TaxableFactoryKit<Taxable> taxableFactory) {
 		String[] tokens = line.split(" ");
 		String kind = tokens[0];
-		return taxableFactory.createTaxable(kind, Arrays.stream(tokens).skip(1).collect(Collectors.toList()));
+		return taxableFactory.create(kind,
+				Arrays.stream(tokens).skip(1).collect(Collectors.toList()));
 	}
 
 	
@@ -46,7 +47,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws IOException{
-		TaxableFactory taxableFactory = new TaxableFactory();
+		TaxableFactoryKit<Taxable> taxableFactory = new TaxableFactoryKit<>();
 		taxableFactory.register("auto", Main::createAuto);
 		taxableFactory.register("moto", Main::createMoto);
 		taxableFactory.register("truck", Main::createTruck);
