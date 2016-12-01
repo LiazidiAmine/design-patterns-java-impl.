@@ -12,7 +12,7 @@ public class Parser {
 		public T transform(String line);
 	}
 	
-	public <T> List<T> parse(Path path, LineTransformer<T> transformer) throws IOException{
+	public static <T> List<T> parse(Path path, LineTransformer<T> transformer) throws IOException{
 		try(Stream<String> lines = Files.lines(path)){
 			return lines.map(transformer::transform)
 					.collect(Collectors.toList());

@@ -20,7 +20,7 @@ public class Main {
 		return () -> 200 * passengerCount;
 	}
 	
-	public static Taxable parseTruck(String line, FactoryKit<Taxable> taxableFactory) {
+	public static Taxable parseTaxable(String line, FactoryKit<Taxable> taxableFactory) {
 		String[] tokens = line.split(" ");
 		String kind = tokens[0];
 		return taxableFactory.create(kind,
@@ -36,7 +36,7 @@ public class Main {
 		return new Truck(weight);
 	}
 	
-	public static List<Taxable> createConvoy(Path path, FactoryKit<Taxable> taxableFactory){
+	public static List<Taxable> createConvoy(Path path, FactoryKit<Taxable> taxableFactory) throws IOException{
 		return Parser.parse(path, line -> parseTaxable(line, taxableFactory));
 	}
 	
