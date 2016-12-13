@@ -15,6 +15,13 @@ public class ExprVisitor<R> {
 	}
 	
 	public R call(Expr expr){
-		return map.get(expr.getClass()).apply(expr);
+		Class<? extends Expr> type = expr.getClass();
+		return map.getOrDefault(type, unknow(type)).apply(expr);
+	}
+	
+	private Function<Expr, ? extends R> unknow(Class<? extends Expr> type){
+		return __ -> {
+			throw new IllegalStateException("unknown class "+ type);
+		};
 	}
 }
